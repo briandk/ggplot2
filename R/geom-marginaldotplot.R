@@ -34,48 +34,48 @@
 #'
 #' @examples
 #'
-#' ggplot(mtcars, aes(x = mpg)) + geom_dotplot()
-#' ggplot(mtcars, aes(x = mpg)) + geom_dotplot(binwidth = 1.5)
+#' ggplot(mtcars, aes(x = mpg)) + geom_marginaldotplot()
+#' ggplot(mtcars, aes(x = mpg)) + geom_marginaldotplot(binwidth = 1.5)
 #'
 #' # Use fixed-width bins
 #' ggplot(mtcars, aes(x = mpg)) + 
-#'   geom_dotplot(method="histodot", binwidth = 1.5)
+#'   geom_marginaldotplot(method="histodot", binwidth = 1.5)
 #'
 #' # Some other stacking methods
 #' ggplot(mtcars, aes(x = mpg)) +
-#'   geom_dotplot(binwidth = 1.5, stackdir = "center")
+#'   geom_marginaldotplot(binwidth = 1.5, stackdir = "center")
 #' ggplot(mtcars, aes(x = mpg)) +
-#'   geom_dotplot(binwidth = 1.5, stackdir = "centerwhole")
+#'   geom_marginaldotplot(binwidth = 1.5, stackdir = "centerwhole")
 #'
 #' # y axis isn't really meaningful, so hide it
-#' ggplot(mtcars, aes(x = mpg)) + geom_dotplot(binwidth = 1.5) + 
+#' ggplot(mtcars, aes(x = mpg)) + geom_marginaldotplot(binwidth = 1.5) + 
 #'   scale_y_continuous(name = "", breaks = NA)
 #'
 #' # Overlap dots vertically
-#' ggplot(mtcars, aes(x = mpg)) + geom_dotplot(binwidth = 1.5, stackratio = .7)
+#' ggplot(mtcars, aes(x = mpg)) + geom_marginaldotplot(binwidth = 1.5, stackratio = .7)
 #'
 #' # Expand dot diameter
-#' ggplot(mtcars, aes(x  =mpg)) + geom_dotplot(binwidth = 1.5, dotsize = 1.25)
+#' ggplot(mtcars, aes(x  =mpg)) + geom_marginaldotplot(binwidth = 1.5, dotsize = 1.25)
 #'
 #'
 #' # Examples with stacking along y axis instead of x
 #' ggplot(mtcars, aes(x = 1, y = mpg)) +
-#'   geom_dotplot(binaxis = "y", stackdir = "center")
+#'   geom_marginaldotplot(binaxis = "y", stackdir = "center")
 #'
 #' ggplot(mtcars, aes(x = factor(cyl), y = mpg)) + 
-#'   geom_dotplot(binaxis = "y", stackdir = "center")
+#'   geom_marginaldotplot(binaxis = "y", stackdir = "center")
 #'
 #' ggplot(mtcars, aes(x = factor(cyl), y = mpg)) + 
-#'   geom_dotplot(binaxis = "y", stackdir = "centerwhole")
+#'   geom_marginaldotplot(binaxis = "y", stackdir = "centerwhole")
 #'
 #' ggplot(mtcars, aes(x = factor(vs), fill = factor(cyl), y = mpg)) + 
-#'   geom_dotplot(binaxis = "y", stackdir = "center", position = "dodge")
+#'   geom_marginaldotplot(binaxis = "y", stackdir = "center", position = "dodge")
 #'
 #' # binpositions="all" ensures that the bins are aligned between groups
 #' ggplot(mtcars, aes(x = factor(am), y = mpg)) + 
-#'   geom_dotplot(binaxis = "y", stackdir = "center", binpositions="all")
+#'   geom_marginaldotplot(binaxis = "y", stackdir = "center", binpositions="all")
 #'
-geom_dotplot <- function (mapping = NULL, data = NULL, stat = "bindot", position = "identity",
+geom_marginaldotplot <- function (mapping = NULL, data = NULL, stat = "bindot", position = "identity",
 na.rm = FALSE, binwidth = NULL, binaxis = "x", method="dotdensity", binpositions = "bygroup", stackdir = "up",
 stackratio = 1, dotsize = 1, ...) {
   GeomDotplot$new(mapping = mapping, data = data, stat = stat, position = position,
@@ -84,7 +84,7 @@ stackratio = 1, dotsize = 1, ...) {
 }
 
 GeomDotplot <- proto(Geom, {
-  objname <- "dotplot"
+  objname <- "marginaldotplot"
 
   new <- function(., mapping = NULL, data = NULL, stat = NULL, position = NULL, ...){
     # This code is adapted from Layer$new. It's needed to pull out the stat_params
@@ -186,11 +186,11 @@ GeomDotplot <- proto(Geom, {
   draw <- function(., data, scales, coordinates, na.rm = FALSE, binaxis = "x",
                    stackdir = "up", stackratio = 1, dotsize = 1, ...) {
     data <- remove_missing(data, na.rm, 
-      c("x", "y", "size", "shape"), name = "geom_dotplot")
+      c("x", "y", "size", "shape"), name = "geom_marginaldotplot")
     if (empty(data)) return(zeroGrob())
 
     if (!is.linear(coordinates)) {
-      warning("geom_dotplot does not work properly with non-linear coordinates.")
+      warning("geom_marginaldotplot does not work properly with non-linear coordinates.")
     }
 
     tdata <- coord_transform(coordinates, data, scales)
@@ -217,7 +217,7 @@ GeomDotplot <- proto(Geom, {
     )
   }
 
-  guide_geom <- function(.) "dotplot"
+  guide_geom <- function(.) "marginaldotplot"
   draw_legend <- function(., data, ...) {
     data$shape <- 21
 
