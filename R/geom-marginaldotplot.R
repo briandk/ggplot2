@@ -6,7 +6,7 @@ stackratio = 1, dotsize = 1, ...) {
   stackdir = stackdir, stackratio = stackratio, dotsize = dotsize, ...)
 }
 
-GeomDotplot <- proto(Geom, {
+GeomDotplot <- proto(ggplot2:::Geom, {
   objname <- "marginaldotplot"
 
   new <- function(., mapping = NULL, data = NULL, stat = NULL, position = NULL, ...){
